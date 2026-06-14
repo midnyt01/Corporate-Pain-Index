@@ -38,7 +38,7 @@ export function AssessmentProvider({
   const [isHydrated, setIsHydrated] =
     useState(false);
 
-  // Load answers from localStorage
+  // Load saved answers
   useEffect(() => {
     try {
       const stored =
@@ -47,11 +47,13 @@ export function AssessmentProvider({
         );
 
       if (stored) {
-        setAnswers(JSON.parse(stored));
+        setAnswers(
+          JSON.parse(stored)
+        );
       }
     } catch (error) {
       console.error(
-        "Error loading assessment data",
+        "Error loading assessment data:",
         error
       );
     }
@@ -59,7 +61,7 @@ export function AssessmentProvider({
     setIsHydrated(true);
   }, []);
 
-  // Save answers to localStorage
+  // Auto-save answers
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -67,7 +69,10 @@ export function AssessmentProvider({
       "assessment_answers",
       JSON.stringify(answers)
     );
-  }, [answers, isHydrated]);
+  }, [
+    answers,
+    isHydrated,
+  ]);
 
   const setAnswer = (
     questionId: string,
@@ -84,6 +89,10 @@ export function AssessmentProvider({
 
     localStorage.removeItem(
       "assessment_answers"
+    );
+
+    localStorage.removeItem(
+      "results"
     );
   };
 
@@ -103,7 +112,9 @@ export function AssessmentProvider({
 
 export function useAssessment() {
   const context =
-    useContext(AssessmentContext);
+    useContext(
+      AssessmentContext
+    );
 
   if (!context) {
     throw new Error(

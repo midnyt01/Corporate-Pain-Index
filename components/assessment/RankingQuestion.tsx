@@ -84,8 +84,10 @@ const defaultItems = [
 export default function RankingQuestion({
   questionId,
 }: Props) {
-  const { setAnswer } =
-    useAssessment();
+  const {
+    answers,
+    setAnswer,
+  } = useAssessment();
 
   const [items, setItems] =
     useState(defaultItems);
@@ -101,14 +103,42 @@ export default function RankingQuestion({
     })
   );
 
+  // Restore previous ranking OR save default ranking once
   useEffect(() => {
-    setAnswer(
-      questionId,
-      items.map(
-        (item) => item.title
-      )
-    );
-  }, [items, questionId, setAnswer]);
+    const savedRanking =
+      answers[questionId];
+
+    if (
+      savedRanking &&
+      Array.isArray(savedRanking)
+    ) {
+      const restoredItems =
+        savedRanking
+          .map((title: string) =>
+            defaultItems.find(
+              (item) =>
+                item.title === title
+            )
+          )
+          .filter(Boolean);
+
+      if (
+        restoredItems.length ===
+        defaultItems.length
+      ) {
+        setItems(
+          restoredItems as typeof defaultItems
+        );
+      }
+    } else {
+      setAnswer(
+        questionId,
+        defaultItems.map(
+          (item) => item.title
+        )
+      );
+    }
+  }, []);
 
   const handleDragEnd = (
     event: any
@@ -119,8 +149,9 @@ export default function RankingQuestion({
     if (
       !over ||
       active.id === over.id
-    )
+    ) {
       return;
+    }
 
     const oldIndex =
       items.findIndex(
@@ -134,13 +165,22 @@ export default function RankingQuestion({
           item.id === over.id
       );
 
-    const newItems = arrayMove(
-      items,
-      oldIndex,
-      newIndex
-    );
+    const newItems =
+      arrayMove(
+        items,
+        oldIndex,
+        newIndex
+      );
 
     setItems(newItems);
+
+    // Save new ranking
+    setAnswer(
+      questionId,
+      newItems.map(
+        (item) => item.title
+      )
+    );
   };
 
   return (
@@ -148,9 +188,7 @@ export default function RankingQuestion({
       <p
         className="
         text-slate-400
-
         mb-6
-
         text-sm
         "
       >
@@ -174,7 +212,10 @@ export default function RankingQuestion({
         >
           <div className="space-y-4">
             {items.map(
-              (item, index) => (
+              (
+                item,
+                index
+              ) => (
                 <SortableItem
                   key={item.id}
                   id={item.id}

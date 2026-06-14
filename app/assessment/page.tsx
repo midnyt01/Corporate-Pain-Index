@@ -8,6 +8,13 @@ import QuestionCard from "@/components/ui/QuestionCard";
 import QuestionRenderer from "@/components/assessment/QuestionRenderer";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import SavingScreen from "@/components/assessment/SavingScreen";
+import { saveSurvey } from "@/services/saveSurvey";
+
+import { buildSurveyPayload } from "@/lib/buildSurveyPayload";
+
+import {
+  saveResults,
+} from "@/lib/resultsStorage";
 
 import {
   AnimatePresence,
@@ -79,22 +86,43 @@ export default function AssessmentPage() {
     return true;
   };
 
-  const handleFinish = async () => {
+const handleFinish = async () => {
+  try {
+    const payload =
+      buildSurveyPayload(
+        answers
+      );
+
     console.log(
-      "ASSESSMENT DATA:",
-      answers
+      "PAYLOAD",
+      payload
     );
+    console.log(answers)
 
     setIsSaving(true);
+
+    await saveSurvey(
+      payload
+    );
+    saveResults(payload);
 
     setTimeout(() => {
       setShowConfetti(true);
     }, 800);
 
     setTimeout(() => {
-      router.push("/results");
-    }, 3000);
-  };
+      router.push(
+        "/results"
+      );
+    }, 2500);
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Something went wrong."
+    );
+  }
+};
 
   const handleNext = () => {
     if (!isAnswerValid()) {
