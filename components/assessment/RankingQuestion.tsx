@@ -34,14 +34,12 @@ const defaultItems = [
     description:
       "Skills, promotions and career growth",
   },
-
   {
     id: "fitness",
     title: "💪 Fitness & Health",
     description:
       "Workout consistency and health goals",
   },
-
   {
     id: "tax",
     title:
@@ -49,21 +47,18 @@ const defaultItems = [
     description:
       "Taxes, investing and wealth creation",
   },
-
   {
     id: "email",
     title: "📧 Email Management",
     description:
       "Inbox overload and communication",
   },
-
   {
     id: "notes",
     title: "📝 Meeting Notes",
     description:
       "Tracking actions and decisions",
   },
-
   {
     id: "scheduling",
     title:
@@ -71,7 +66,6 @@ const defaultItems = [
     description:
       "Finding time and coordinating meetings",
   },
-
   {
     id: "resume",
     title:
@@ -97,8 +91,8 @@ export default function RankingQuestion({
 
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
-        tolerance: 10,
+        delay: 200,
+        tolerance: 5,
       },
     })
   );
@@ -173,14 +167,12 @@ export default function RankingQuestion({
 
     setItems(newItems);
 
-    requestAnimationFrame(() => {
-      setAnswer(
-        questionId,
-        newItems.map(
-          (item) => item.title
-        )
-      );
-    });
+    setAnswer(
+      questionId,
+      newItems.map(
+        (item) => item.title
+      )
+    );
   };
 
   return (
@@ -192,9 +184,9 @@ export default function RankingQuestion({
         text-sm
       "
       >
-        Drag cards to rank from
-        MOST impactful to LEAST
-        impactful.
+        Drag using the ≡ handle to
+        rank from MOST impactful
+        to LEAST impactful.
       </p>
 
       <DndContext
