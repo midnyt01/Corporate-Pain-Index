@@ -1,26 +1,238 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Colors */
+  
+  --background: #050816;
+  --foreground: #f8fafc;
+
+  --primary: #8b5cf6;
+  --primary-hover: #a78bfa;
+
+  --secondary: #06b6d4;
+
+  --muted: #94a3b8;
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* Cards */
+  --card: rgba(10, 15, 35, 0.55);
+  --card-hover: rgba(20, 25, 50, 0.7);
+
+  --border: rgba(255, 255, 255, 0.08);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    135deg,
+    #8b5cf6 0%,
+    #a78bfa 100%
+  );
+
+  --gradient-aurora:
+    radial-gradient(
+      900px circle at 15% 15%,
+      rgba(139, 92, 246, 0.38),
+      transparent 55%
+    ),
+    radial-gradient(
+      700px circle at 100% 25%,
+      rgba(6, 182, 212, 0.22),
+      transparent 50%
+    ),
+    radial-gradient(
+      700px circle at 50% 100%,
+      rgba(236, 72, 153, 0.18),
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      #050816 0%,
+      #040611 100%
+    );
+
+  /* Shadows */
+  --shadow-card:
+    0 10px 40px rgba(0, 0, 0, 0.45);
+
+  --shadow-glow:
+    0 0 40px rgba(139, 92, 246, 0.35),
+    0 20px 60px rgba(139, 92, 246, 0.25);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Base */
+
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  background-image: var(--gradient-aurora);
+  background-attachment: fixed;
+
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+  font-family: var(--font-inter);
+
+  position: relative;
+}
+
+/* Dark Overlay */
+
+body::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.12),
+      rgba(0, 0, 0, 0.25)
+    );
+
+  z-index: -2;
+}
+
+/* Center Glow */
+
+body::after {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      600px circle at center,
+      rgba(255, 255, 255, 0.025),
+      transparent 70%
+    );
+
+  z-index: -1;
+}
+
+/* Typography */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-poppins);
+}
+
+/* Glass Card */
+
+.glass-card {
+  background: var(--card);
+
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+
+  border: 1px solid var(--border);
+
+  border-radius: 28px;
+
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Hover Effect */
+
+.glass-hover {
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.glass-hover:hover {
+  background: var(--card-hover);
+
+  transform: translateY(-2px);
+
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Glow Utility */
+
+.glow {
+  box-shadow: var(--shadow-glow);
+}
+
+/* Gradient Text */
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    #8b5cf6,
+    #a78bfa
+  );
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+/* Layout */
+
+.page-container {
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.section-spacing {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+/* Animations */
+
+.animate-fade-up {
+  animation: fadeUp 0.5s ease forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.gauge-container svg {
+  filter:
+    drop-shadow(
+      0 0 15px
+      rgba(
+        168,
+        85,
+        247,
+        0.4
+      )
+    );
 }
