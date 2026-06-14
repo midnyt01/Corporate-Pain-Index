@@ -97,13 +97,12 @@ export default function RankingQuestion({
 
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 120,
-        tolerance: 8,
+        delay: 250,
+        tolerance: 10,
       },
     })
   );
 
-  // Restore previous ranking OR save default ranking once
   useEffect(() => {
     const savedRanking =
       answers[questionId];
@@ -174,13 +173,14 @@ export default function RankingQuestion({
 
     setItems(newItems);
 
-    // Save new ranking
-    setAnswer(
-      questionId,
-      newItems.map(
-        (item) => item.title
-      )
-    );
+    requestAnimationFrame(() => {
+      setAnswer(
+        questionId,
+        newItems.map(
+          (item) => item.title
+        )
+      );
+    });
   };
 
   return (
@@ -190,7 +190,7 @@ export default function RankingQuestion({
         text-slate-400
         mb-6
         text-sm
-        "
+      "
       >
         Drag cards to rank from
         MOST impactful to LEAST

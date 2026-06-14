@@ -27,7 +27,7 @@ export const questions: Question[] = [
   "Finance",
   "Operations",
   "Human Resources",
-  "Founder / Entrepreneur",
+  "Founder",
   "Other"
 ],
   },

@@ -7,6 +7,9 @@ import HiddenCostCard from "@/components/results/HiddenCostCard";
 import SolutionSnapshotCard from "@/components/results/SolutionSnapshotCard";
 import NotAloneCard from "@/components/results/NotAloneCard";
 import ResultsFooter from "@/components/results/ResultsFooter";
+import ResearchCard from "@/components/results/ResearchCard";
+
+
 
 export default function ResultsPage() {
 
@@ -56,6 +59,10 @@ export default function ResultsPage() {
       >
         <SolutionSnapshotCard />
         <NotAloneCard />
+      </div>
+
+      <div className="mt-8">
+        <ResearchCard />
       </div>
 
       <div className="mt-8">
