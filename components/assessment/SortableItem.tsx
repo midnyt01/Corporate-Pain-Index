@@ -4,9 +4,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 
-import {
-  CSS,
-} from "@dnd-kit/utilities";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   id: string;
@@ -27,6 +25,7 @@ export default function SortableItem({
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({
     id,
   });
@@ -36,6 +35,7 @@ export default function SortableItem({
       CSS.Transform.toString(
         transform
       ),
+
     transition,
   };
 
@@ -45,64 +45,122 @@ export default function SortableItem({
       style={style}
       {...attributes}
       {...listeners}
-      className="
-      cursor-grab
+      className={`
+        rounded-3xl
 
-      rounded-3xl
+        border
 
-      border
-      border-white/10
+        ${
+          isDragging
+            ? "border-violet-500"
+            : "border-white/10"
+        }
 
-      bg-white/[0.03]
+        bg-white/[0.03]
 
-      p-5
+        backdrop-blur-xl
 
-      flex
-      items-center
-      gap-4
+        p-5
 
-      hover:border-violet-500/40
+        transition-all
 
-      transition-all
-      "
+        cursor-grab
+
+        active:cursor-grabbing
+
+        touch-none
+
+        select-none
+
+        ${
+          isDragging
+            ? "scale-[1.02] shadow-2xl"
+            : ""
+        }
+      `}
     >
       <div
         className="
-        w-10
-        h-10
-
-        rounded-full
-
-        bg-violet-500/20
-
         flex
-        items-center
-        justify-center
 
-        font-bold
+        items-center
+
+        gap-4
         "
       >
-        {rank}
-      </div>
+        {/* Rank */}
 
-      <div>
-        <h3
+        <div
           className="
-          font-semibold
-          text-lg
-          "
-        >
-          {title}
-        </h3>
+          w-10
+          h-10
 
-        <p
-          className="
-          text-slate-400
+          rounded-full
+
+          bg-violet-500/15
+
+          flex
+
+          items-center
+
+          justify-center
+
           text-sm
+
+          font-semibold
+
+          text-violet-300
+
+          shrink-0
           "
         >
-          {description}
-        </p>
+          {rank}
+        </div>
+
+        {/* Content */}
+
+        <div className="flex-1 min-w-0">
+          <h3
+            className="
+            text-white
+
+            font-semibold
+
+            text-sm
+            md:text-base
+            "
+          >
+            {title}
+          </h3>
+
+          <p
+            className="
+            text-sm
+
+            text-slate-400
+
+            mt-1
+            "
+          >
+            {description}
+          </p>
+        </div>
+
+        {/* Visual Drag Hint */}
+
+        <div
+          className="
+          text-slate-500
+
+          text-2xl
+
+          shrink-0
+
+          select-none
+          "
+        >
+          ☰
+        </div>
       </div>
     </div>
   );

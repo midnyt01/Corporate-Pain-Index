@@ -1,9 +1,12 @@
-
 "use client";
 
 import {
   DndContext,
   closestCenter,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 
 import {
@@ -12,7 +15,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   useAssessment,
@@ -41,7 +44,8 @@ const defaultItems = [
 
   {
     id: "tax",
-    title: "💰 Tax & Investment Planning",
+    title:
+      "💰 Tax & Investment Planning",
     description:
       "Taxes, investing and wealth creation",
   },
@@ -62,14 +66,16 @@ const defaultItems = [
 
   {
     id: "scheduling",
-    title: "📅 Meeting Scheduling",
+    title:
+      "📅 Meeting Scheduling",
     description:
       "Finding time and coordinating meetings",
   },
 
   {
     id: "resume",
-    title: "📄 Resume & LinkedIn",
+    title:
+      "📄 Resume & LinkedIn",
     description:
       "Personal branding and opportunities",
   },
@@ -84,10 +90,31 @@ export default function RankingQuestion({
   const [items, setItems] =
     useState(defaultItems);
 
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 120,
+        tolerance: 8,
+      },
+    })
+  );
+
+  useEffect(() => {
+    setAnswer(
+      questionId,
+      items.map(
+        (item) => item.title
+      )
+    );
+  }, [items, questionId, setAnswer]);
+
   const handleDragEnd = (
     event: any
   ) => {
-    const { active, over } = event;
+    const { active, over } =
+      event;
 
     if (
       !over ||
@@ -95,15 +122,17 @@ export default function RankingQuestion({
     )
       return;
 
-    const oldIndex = items.findIndex(
-      (item) =>
-        item.id === active.id
-    );
+    const oldIndex =
+      items.findIndex(
+        (item) =>
+          item.id === active.id
+      );
 
-    const newIndex = items.findIndex(
-      (item) =>
-        item.id === over.id
-    );
+    const newIndex =
+      items.findIndex(
+        (item) =>
+          item.id === over.id
+      );
 
     const newItems = arrayMove(
       items,
@@ -112,13 +141,6 @@ export default function RankingQuestion({
     );
 
     setItems(newItems);
-
-    setAnswer(
-      questionId,
-      newItems.map(
-        (item) => item.id
-      )
-    );
   };
 
   return (
@@ -126,7 +148,9 @@ export default function RankingQuestion({
       <p
         className="
         text-slate-400
+
         mb-6
+
         text-sm
         "
       >
@@ -136,6 +160,7 @@ export default function RankingQuestion({
       </p>
 
       <DndContext
+        sensors={sensors}
         collisionDetection={
           closestCenter
         }
