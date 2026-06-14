@@ -12,6 +12,12 @@ type AnswerMap = Record<string, any>;
 interface AssessmentContextType {
   answers: AnswerMap;
 
+  currentQuestionIndex: number;
+
+  setCurrentQuestionIndex: (
+    index: number
+  ) => void;
+
   setAnswer: (
     questionId: string,
     answer: any
@@ -35,20 +41,36 @@ export function AssessmentProvider({
   const [answers, setAnswers] =
     useState<AnswerMap>({});
 
+  const [
+    currentQuestionIndex,
+    setCurrentQuestionIndex,
+  ] = useState(0);
+
   const [isHydrated, setIsHydrated] =
     useState(false);
 
-  // Load saved answers
+  // Load data
   useEffect(() => {
     try {
-      const stored =
+      const storedAnswers =
         localStorage.getItem(
           "assessment_answers"
         );
 
-      if (stored) {
+      const storedProgress =
+        localStorage.getItem(
+          "assessment_progress"
+        );
+
+      if (storedAnswers) {
         setAnswers(
-          JSON.parse(stored)
+          JSON.parse(storedAnswers)
+        );
+      }
+
+      if (storedProgress) {
+        setCurrentQuestionIndex(
+          Number(storedProgress)
         );
       }
     } catch (error) {
@@ -61,7 +83,7 @@ export function AssessmentProvider({
     setIsHydrated(true);
   }, []);
 
-  // Auto-save answers
+  // Save answers
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -69,8 +91,18 @@ export function AssessmentProvider({
       "assessment_answers",
       JSON.stringify(answers)
     );
+  }, [answers, isHydrated]);
+
+  // Save progress
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    localStorage.setItem(
+      "assessment_progress",
+      currentQuestionIndex.toString()
+    );
   }, [
-    answers,
+    currentQuestionIndex,
     isHydrated,
   ]);
 
@@ -87,8 +119,14 @@ export function AssessmentProvider({
   const clearAnswers = () => {
     setAnswers({});
 
+    setCurrentQuestionIndex(0);
+
     localStorage.removeItem(
       "assessment_answers"
+    );
+
+    localStorage.removeItem(
+      "assessment_progress"
     );
 
     localStorage.removeItem(
@@ -100,8 +138,14 @@ export function AssessmentProvider({
     <AssessmentContext.Provider
       value={{
         answers,
+
+        currentQuestionIndex,
+        setCurrentQuestionIndex,
+
         setAnswer,
+
         clearAnswers,
+
         isHydrated,
       }}
     >

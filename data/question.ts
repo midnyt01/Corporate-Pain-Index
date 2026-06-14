@@ -19,7 +19,7 @@ export const questions: Question[] = [
     type: "single-select",
     title: "What best describes your role?",
     options: [
-  "Engineering & Technology",
+  "Technology",
   "Product",
   "Consulting",
   "Marketing & Growth",

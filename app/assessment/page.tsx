@@ -26,10 +26,16 @@ import { useRouter } from "next/navigation";
 export default function AssessmentPage() {
   const router = useRouter();
 
-  const { answers } = useAssessment();
+  const {
+  answers,
+  currentQuestionIndex,
+  setCurrentQuestionIndex,
+  isHydrated
+} = useAssessment();
 
-  const [currentQuestionIndex, setCurrentQuestionIndex] =
-    useState(0);
+  if (!isHydrated) {
+    return null;
+  }
 
   const [showValidation, setShowValidation] =
     useState(false);
@@ -39,6 +45,35 @@ export default function AssessmentPage() {
 
   const [showConfetti, setShowConfetti] =
     useState(false);
+
+    if (!isHydrated) {
+  return (
+    <div
+      className="
+      min-h-screen
+      flex
+      items-center
+      justify-center
+      "
+    >
+      <div
+        className="
+        h-10
+        w-10
+
+        rounded-full
+
+        border-2
+        border-white/20
+
+        border-t-cyan-400
+
+        animate-spin
+        "
+      />
+    </div>
+  );
+}
 
   const question =
     questions[currentQuestionIndex];
@@ -106,6 +141,10 @@ const handleFinish = async () => {
     );
     saveResults(payload);
 
+    localStorage.removeItem(
+  "assessment_progress"
+);
+
     setTimeout(() => {
       setShowConfetti(true);
     }, 800);
@@ -135,17 +174,17 @@ const handleFinish = async () => {
       return;
     }
 
-    setCurrentQuestionIndex(
-      (prev) => prev + 1
-    );
+setCurrentQuestionIndex(
+  currentQuestionIndex + 1
+);
   };
 
   const handleBack = () => {
     if (isFirstQuestion) return;
 
-    setCurrentQuestionIndex(
-      (prev) => prev - 1
-    );
+setCurrentQuestionIndex(
+  currentQuestionIndex - 1
+);
   };
 
   if (isSaving) {
