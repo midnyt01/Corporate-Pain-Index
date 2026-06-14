@@ -307,26 +307,29 @@ min-h-[100svh]
     {showResumeModal && (
       <>
         <motion.div
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          exit={{
-            opacity: 0,
-          }}
-          className="
-            fixed
-            inset-0
+  initial={{
+    opacity: 0,
+  }}
+  animate={{
+    opacity: 1,
+  }}
+  exit={{
+    opacity: 0,
+  }}
+  onClick={() =>
+    setShowResumeModal(false)
+  }
+  className="
+    fixed
+    inset-0
 
-            bg-black/60
+    bg-black/60
 
-            backdrop-blur-sm
+    backdrop-blur-sm
 
-            z-50
-          "
-        />
+    z-50
+  "
+/>
 
         <motion.div
           initial={{
@@ -334,6 +337,9 @@ min-h-[100svh]
             scale: 0.95,
             y: 20,
           }}
+          onClick={(e) =>
+    e.stopPropagation()
+  }
           animate={{
             opacity: 1,
             scale: 1,
