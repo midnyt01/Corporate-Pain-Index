@@ -8,8 +8,6 @@ import { CSS } from "@dnd-kit/utilities";
 
 import {
   GripVertical,
-  ChevronUp,
-  ChevronDown,
 } from "lucide-react";
 
 interface Props {
@@ -17,11 +15,6 @@ interface Props {
   rank: number;
   title: string;
   description: string;
-  isMobile?: boolean;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
-  disableUp?: boolean;
-  disableDown?: boolean;
 }
 
 export default function SortableItem({
@@ -29,11 +22,6 @@ export default function SortableItem({
   rank,
   title,
   description,
-  isMobile = false,
-  onMoveUp,
-  onMoveDown,
-  disableUp,
-  disableDown,
 }: Props) {
   const {
     attributes,
@@ -58,12 +46,6 @@ export default function SortableItem({
     <div
       ref={setNodeRef}
       style={style}
-      {...(!isMobile
-        ? attributes
-        : {})}
-      {...(!isMobile
-        ? listeners
-        : {})}
       className={`
         rounded-3xl
         border
@@ -80,12 +62,6 @@ export default function SortableItem({
         p-5
 
         transition-all
-
-        ${
-          !isMobile
-            ? "cursor-grab active:cursor-grabbing"
-            : ""
-        }
 
         ${
           isDragging
@@ -169,79 +145,38 @@ export default function SortableItem({
           </p>
         </div>
 
-        {/* Mobile Arrows */}
+        {/* Drag Handle */}
 
-        {isMobile && (
-          <div
-            className="
-            flex
-            flex-col
-
-            items-center
-
-            gap-1
-
+        <button
+          {...attributes}
+          {...listeners}
+          className="
             shrink-0
-            "
-          >
-            <button
-              onClick={onMoveUp}
-              disabled={disableUp}
-              className="
-              text-slate-400
 
-              hover:text-white
+            p-2
 
-              disabled:opacity-20
+            rounded-xl
 
-              transition-all
-              "
-            >
-              <ChevronUp
-                className="
-                h-5
-                w-5
-                "
-              />
-            </button>
+            text-slate-500
 
-            <button
-              onClick={onMoveDown}
-              disabled={disableDown}
-              className="
-              text-slate-400
+            hover:text-white
 
-              hover:text-white
+            transition-all
 
-              disabled:opacity-20
+            cursor-grab
+            active:cursor-grabbing
 
-              transition-all
-              "
-            >
-              <ChevronDown
-                className="
-                h-5
-                w-5
-                "
-              />
-            </button>
-          </div>
-        )}
-
-        {/* Desktop Drag */}
-
-        {!isMobile && (
+            touch-none
+          "
+          aria-label="Drag item"
+        >
           <GripVertical
             className="
             h-5
             w-5
-
-            text-slate-500
-
-            shrink-0
             "
           />
-        )}
+        </button>
       </div>
     </div>
   );

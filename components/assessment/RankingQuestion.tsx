@@ -21,11 +21,6 @@ import {
 } from "react";
 
 import {
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
-
-import {
   useAssessment,
 } from "@/context/AssessmentContext";
 
@@ -94,36 +89,13 @@ export default function RankingQuestion({
   const [items, setItems] =
     useState(defaultItems);
 
-  const [isMobile, setIsMobile] =
-    useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(
-        window.innerWidth < 768
-      );
-    };
-
-    checkMobile();
-
-    window.addEventListener(
-      "resize",
-      checkMobile
-    );
-
-    return () =>
-      window.removeEventListener(
-        "resize",
-        checkMobile
-      );
-  }, []);
-
   const sensors = useSensors(
     useSensor(MouseSensor),
+
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
-        tolerance: 10,
+        delay: 150,
+        tolerance: 5,
       },
     })
   );
@@ -173,8 +145,9 @@ export default function RankingQuestion({
     if (
       !over ||
       active.id === over.id
-    )
+    ) {
       return;
+    }
 
     const oldIndex =
       items.findIndex(
@@ -205,42 +178,6 @@ export default function RankingQuestion({
     );
   };
 
-  const moveItem = (
-    index: number,
-    direction:
-      | "up"
-      | "down"
-  ) => {
-    const targetIndex =
-      direction === "up"
-        ? index - 1
-        : index + 1;
-
-    if (
-      targetIndex < 0 ||
-      targetIndex >=
-        items.length
-    ) {
-      return;
-    }
-
-    const newItems =
-      arrayMove(
-        items,
-        index,
-        targetIndex
-      );
-
-    setItems(newItems);
-
-    setAnswer(
-      questionId,
-      newItems.map(
-        (item) => item.title
-      )
-    );
-  };
-
   return (
     <div>
       <p
@@ -250,17 +187,14 @@ export default function RankingQuestion({
         text-sm
       "
       >
-        {isMobile
-          ? "Use the arrows to rank from MOST impactful to LEAST impactful."
-          : "Drag cards to rank from MOST impactful to LEAST impactful."}
+        Use the handle on the
+        right to rank from MOST
+        impactful to LEAST
+        impactful.
       </p>
 
       <DndContext
-        sensors={
-          isMobile
-            ? []
-            : sensors
-        }
+        sensors={sensors}
         collisionDetection={
           closestCenter
         }
@@ -274,44 +208,30 @@ export default function RankingQuestion({
             verticalListSortingStrategy
           }
         >
-<div className="space-y-4">
-  {items.map(
-    (
-      item,
-      index
-    ) => (
-      <SortableItem
-        key={item.id}
-        id={item.id}
-        rank={index + 1}
-        title={item.title}
-        description={
-          item.description
-        }
-        isMobile={isMobile}
-        onMoveUp={() =>
-          moveItem(
-            index,
-            "up"
-          )
-        }
-        onMoveDown={() =>
-          moveItem(
-            index,
-            "down"
-          )
-        }
-        disableUp={
-          index === 0
-        }
-        disableDown={
-          index ===
-          items.length - 1
-        }
-      />
-    )
-  )}
-</div>
+          <div
+            className="
+            space-y-4
+            "
+          >
+            {items.map(
+              (
+                item,
+                index
+              ) => (
+                <SortableItem
+                  key={item.id}
+                  id={item.id}
+                  rank={index + 1}
+                  title={
+                    item.title
+                  }
+                  description={
+                    item.description
+                  }
+                />
+              )
+            )}
+          </div>
         </SortableContext>
       </DndContext>
     </div>
