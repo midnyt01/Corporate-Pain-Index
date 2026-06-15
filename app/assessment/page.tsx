@@ -157,7 +157,6 @@ localStorage.removeItem(
 
 setCurrentQuestionIndex(0);
 
-clearAnswers();
 
 
     setTimeout(() => {
