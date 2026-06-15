@@ -33,9 +33,6 @@ export default function AssessmentPage() {
   isHydrated
 } = useAssessment();
 
-  if (!isHydrated) {
-    return null;
-  }
 
   const [showValidation, setShowValidation] =
     useState(false);
@@ -96,30 +93,38 @@ export default function AssessmentPage() {
     }, 2500);
   };
 
-  const isAnswerValid = () => {
-    if (
-      currentAnswer === undefined ||
-      currentAnswer === null
-    ) {
-      return false;
-    }
-
-    if (
-      typeof currentAnswer === "string" &&
-      currentAnswer.trim() === ""
-    ) {
-      return false;
-    }
-
-    if (
-      Array.isArray(currentAnswer) &&
-      currentAnswer.length === 0
-    ) {
-      return false;
-    }
-
+const isAnswerValid = () => {
+  // Lead capture is optional
+  if (
+    question.type ===
+    "lead-capture"
+  ) {
     return true;
-  };
+  }
+
+  if (
+    currentAnswer === undefined ||
+    currentAnswer === null
+  ) {
+    return false;
+  }
+
+  if (
+    typeof currentAnswer === "string" &&
+    currentAnswer.trim() === ""
+  ) {
+    return false;
+  }
+
+  if (
+    Array.isArray(currentAnswer) &&
+    currentAnswer.length === 0
+  ) {
+    return false;
+  }
+
+  return true;
+};
 
 const handleFinish = async () => {
   try {
