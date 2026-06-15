@@ -15,7 +15,15 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+} from "react";
+
+import {
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
 import {
   useAssessment,
@@ -34,14 +42,12 @@ const defaultItems = [
     description:
       "Skills, promotions and career growth",
   },
-
   {
     id: "fitness",
     title: "💪 Fitness & Health",
     description:
       "Workout consistency and health goals",
   },
-
   {
     id: "tax",
     title:
@@ -49,21 +55,18 @@ const defaultItems = [
     description:
       "Taxes, investing and wealth creation",
   },
-
   {
     id: "email",
     title: "📧 Email Management",
     description:
       "Inbox overload and communication",
   },
-
   {
     id: "notes",
     title: "📝 Meeting Notes",
     description:
       "Tracking actions and decisions",
   },
-
   {
     id: "scheduling",
     title:
@@ -71,7 +74,6 @@ const defaultItems = [
     description:
       "Finding time and coordinating meetings",
   },
-
   {
     id: "resume",
     title:
@@ -92,9 +94,32 @@ export default function RankingQuestion({
   const [items, setItems] =
     useState(defaultItems);
 
+  const [isMobile, setIsMobile] =
+    useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth < 768
+      );
+    };
+
+    checkMobile();
+
+    window.addEventListener(
+      "resize",
+      checkMobile
+    );
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        checkMobile
+      );
+  }, []);
+
   const sensors = useSensors(
     useSensor(MouseSensor),
-
     useSensor(TouchSensor, {
       activationConstraint: {
         delay: 250,
@@ -148,9 +173,8 @@ export default function RankingQuestion({
     if (
       !over ||
       active.id === over.id
-    ) {
+    )
       return;
-    }
 
     const oldIndex =
       items.findIndex(
@@ -173,14 +197,48 @@ export default function RankingQuestion({
 
     setItems(newItems);
 
-    requestAnimationFrame(() => {
-      setAnswer(
-        questionId,
-        newItems.map(
-          (item) => item.title
-        )
+    setAnswer(
+      questionId,
+      newItems.map(
+        (item) => item.title
+      )
+    );
+  };
+
+  const moveItem = (
+    index: number,
+    direction:
+      | "up"
+      | "down"
+  ) => {
+    const targetIndex =
+      direction === "up"
+        ? index - 1
+        : index + 1;
+
+    if (
+      targetIndex < 0 ||
+      targetIndex >=
+        items.length
+    ) {
+      return;
+    }
+
+    const newItems =
+      arrayMove(
+        items,
+        index,
+        targetIndex
       );
-    });
+
+    setItems(newItems);
+
+    setAnswer(
+      questionId,
+      newItems.map(
+        (item) => item.title
+      )
+    );
   };
 
   return (
@@ -192,17 +250,23 @@ export default function RankingQuestion({
         text-sm
       "
       >
-        Drag cards to rank from
-        MOST impactful to LEAST
-        impactful.
+        {isMobile
+          ? "Use the arrows to rank from MOST impactful to LEAST impactful."
+          : "Drag cards to rank from MOST impactful to LEAST impactful."}
       </p>
 
       <DndContext
-        sensors={sensors}
+        sensors={
+          isMobile
+            ? []
+            : sensors
+        }
         collisionDetection={
           closestCenter
         }
-        onDragEnd={handleDragEnd}
+        onDragEnd={
+          handleDragEnd
+        }
       >
         <SortableContext
           items={items}
@@ -210,28 +274,44 @@ export default function RankingQuestion({
             verticalListSortingStrategy
           }
         >
-          <div className="space-y-4">
-            {items.map(
-              (
-                item,
-                index
-              ) => (
-                <SortableItem
-                  key={item.id}
-                  id={item.id}
-                  rank={
-                    index + 1
-                  }
-                  title={
-                    item.title
-                  }
-                  description={
-                    item.description
-                  }
-                />
-              )
-            )}
-          </div>
+<div className="space-y-4">
+  {items.map(
+    (
+      item,
+      index
+    ) => (
+      <SortableItem
+        key={item.id}
+        id={item.id}
+        rank={index + 1}
+        title={item.title}
+        description={
+          item.description
+        }
+        isMobile={isMobile}
+        onMoveUp={() =>
+          moveItem(
+            index,
+            "up"
+          )
+        }
+        onMoveDown={() =>
+          moveItem(
+            index,
+            "down"
+          )
+        }
+        disableUp={
+          index === 0
+        }
+        disableDown={
+          index ===
+          items.length - 1
+        }
+      />
+    )
+  )}
+</div>
         </SortableContext>
       </DndContext>
     </div>

@@ -6,11 +6,22 @@ import {
 
 import { CSS } from "@dnd-kit/utilities";
 
+import {
+  GripVertical,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
+
 interface Props {
   id: string;
   rank: number;
   title: string;
   description: string;
+  isMobile?: boolean;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  disableUp?: boolean;
+  disableDown?: boolean;
 }
 
 export default function SortableItem({
@@ -18,6 +29,11 @@ export default function SortableItem({
   rank,
   title,
   description,
+  isMobile = false,
+  onMoveUp,
+  onMoveDown,
+  disableUp,
+  disableDown,
 }: Props) {
   const {
     attributes,
@@ -35,7 +51,6 @@ export default function SortableItem({
       CSS.Transform.toString(
         transform
       ),
-
     transition,
   };
 
@@ -43,11 +58,14 @@ export default function SortableItem({
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
+      {...(!isMobile
+        ? attributes
+        : {})}
+      {...(!isMobile
+        ? listeners
+        : {})}
       className={`
         rounded-3xl
-
         border
 
         ${
@@ -57,20 +75,17 @@ export default function SortableItem({
         }
 
         bg-white/[0.03]
-
         backdrop-blur-xl
 
         p-5
 
         transition-all
 
-        cursor-grab
-
-        active:cursor-grabbing
-
-        touch-none
-
-        select-none
+        ${
+          !isMobile
+            ? "cursor-grab active:cursor-grabbing"
+            : ""
+        }
 
         ${
           isDragging
@@ -82,9 +97,7 @@ export default function SortableItem({
       <div
         className="
         flex
-
         items-center
-
         gap-4
         "
       >
@@ -100,13 +113,10 @@ export default function SortableItem({
           bg-violet-500/15
 
           flex
-
           items-center
-
           justify-center
 
           text-sm
-
           font-semibold
 
           text-violet-300
@@ -119,7 +129,15 @@ export default function SortableItem({
 
         {/* Content */}
 
-        <div className="flex-1 min-w-0">
+        <div
+          className="
+          flex-1
+
+          min-w-0
+
+          pr-2
+          "
+        >
           <h3
             className="
             text-white
@@ -128,6 +146,8 @@ export default function SortableItem({
 
             text-sm
             md:text-base
+
+            truncate
             "
           >
             {title}
@@ -135,32 +155,93 @@ export default function SortableItem({
 
           <p
             className="
-            text-sm
-
             text-slate-400
 
+            text-xs
+            md:text-sm
+
             mt-1
+
+            line-clamp-1
             "
           >
             {description}
           </p>
         </div>
 
-        {/* Visual Drag Hint */}
+        {/* Mobile Arrows */}
 
-        <div
-          className="
-          text-slate-500
+        {isMobile && (
+          <div
+            className="
+            flex
+            flex-col
 
-          text-2xl
+            items-center
 
-          shrink-0
+            gap-1
 
-          select-none
-          "
-        >
-          ☰
-        </div>
+            shrink-0
+            "
+          >
+            <button
+              onClick={onMoveUp}
+              disabled={disableUp}
+              className="
+              text-slate-400
+
+              hover:text-white
+
+              disabled:opacity-20
+
+              transition-all
+              "
+            >
+              <ChevronUp
+                className="
+                h-5
+                w-5
+                "
+              />
+            </button>
+
+            <button
+              onClick={onMoveDown}
+              disabled={disableDown}
+              className="
+              text-slate-400
+
+              hover:text-white
+
+              disabled:opacity-20
+
+              transition-all
+              "
+            >
+              <ChevronDown
+                className="
+                h-5
+                w-5
+                "
+              />
+            </button>
+          </div>
+        )}
+
+        {/* Desktop Drag */}
+
+        {!isMobile && (
+          <GripVertical
+            className="
+            h-5
+            w-5
+
+            text-slate-500
+
+            shrink-0
+            "
+          />
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import NextImage from "next/image";
+
+import LogoImage from "../../assets/logo.png";
 
 export default function Logo() {
   const router = useRouter();
@@ -9,78 +12,63 @@ export default function Logo() {
     <button
       onClick={() => router.push("/")}
       className="
-      flex
-      items-center
-      gap-2
-      sm:gap-3
-      md:gap-4
+        flex
+        items-center
 
-      min-w-0
+        gap-3
 
-      cursor-pointer
+        cursor-pointer
 
-      transition-all
-      duration-200
-
-      hover:opacity-90
-
+        hover:opacity-90
+        transition-all
+        duration-200
       "
     >
+      {/* Logo */}
+
       <div
         className="
-        w-6
-        h-6
+          relative
 
-        sm:w-7
-        sm:h-7
+          w-10
+          h-10
 
-        md:w-8
-        md:h-8
+          sm:w-12
+          sm:h-12
 
-        rounded-lg
-        sm:rounded-xl
+          md:w-14
+          md:h-14
 
-        shrink-0
-
-        bg-gradient-to-br
-        from-violet-400
-        to-violet-600
-        "
-      />
-
-      {/* Mobile */}
-
-      <span
-        className="
-        block
-        sm:hidden
-
-        text-sm
-
-        font-bold
-
-        text-white
+          shrink-0
         "
       >
-        CPI
-      </span>
+        <NextImage
+          src={LogoImage}
+          alt="Corporate Pain Index Logo"
+          fill
+          priority
+          className="
+            object-contain
+            ml-4
+          "
+        />
+      </div>
 
-      {/* Desktop */}
+      {/* Desktop Text */}
 
       <span
         className="
-        hidden
-        sm:block
+          hidden
+          sm:block
 
-        text-base
-        md:text-lg
+          text-base
+          md:text-lg
 
-        font-bold
+          font-bold
 
-        text-white
+          text-white
 
-        truncate
-        whitespace-nowrap
+          whitespace-nowrap
         "
       >
         Corporate Pain Index
