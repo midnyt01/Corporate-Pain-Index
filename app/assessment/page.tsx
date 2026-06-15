@@ -30,7 +30,8 @@ export default function AssessmentPage() {
   answers,
   currentQuestionIndex,
   setCurrentQuestionIndex,
-  isHydrated
+  isHydrated,
+  clearAnswers,
 } = useAssessment();
 
 
@@ -150,9 +151,18 @@ const handleFinish = async () => {
   "assessment_progress"
 );
 
+localStorage.removeItem(
+  "assessment_answers"
+);
+
+setCurrentQuestionIndex(0);
+
+clearAnswers();
+
+
     setTimeout(() => {
       setShowConfetti(true);
-    }, 800);
+    }, 500);
 
     setTimeout(() => {
       router.push(

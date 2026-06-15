@@ -16,9 +16,22 @@ export default function TextAreaQuestion({
   const { answers, setAnswer } =
     useAssessment();
 
+  const getPlaceholder = () => {
+    switch (questionId) {
+      case "current_solution":
+        return "What's your current workaround? (The duct tape solution counts.)";
+
+      case "open_feedback":
+        return "Tell us what drives you absolutely nuts.";
+
+      default:
+        return "Type your answer here...";
+    }
+  };
+
   return (
     <Textarea
-      placeholder="Type your answer here..."
+      placeholder={getPlaceholder()}
       value={
         answers[questionId] || ""
       }
@@ -29,17 +42,17 @@ export default function TextAreaQuestion({
         )
       }
       className="
-      min-h-[180px]
+        min-h-[180px]
 
-      bg-white/[0.03]
+        bg-white/[0.03]
 
-      border-white/10
+        border-white/10
 
-      rounded-3xl
+        rounded-3xl
 
-      text-white
+        text-white
 
-      placeholder:text-slate-500
+        placeholder:text-slate-500
       "
     />
   );
