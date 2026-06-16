@@ -160,7 +160,7 @@ setCurrentQuestionIndex(0);
 
 
     setTimeout(() => {
-      setShowConfetti(false);
+      setShowConfetti(true);
     }, 500);
 
     setTimeout(() => {

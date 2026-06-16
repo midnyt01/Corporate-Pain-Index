@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: dark;
+
   /* Core Colors */
-  
+
   --background: #050816;
   --foreground: #f8fafc;
 
@@ -18,12 +20,14 @@
   --danger: #ef4444;
 
   /* Cards */
+
   --card: rgba(10, 15, 35, 0.55);
   --card-hover: rgba(20, 25, 50, 0.7);
 
   --border: rgba(255, 255, 255, 0.08);
 
   /* Gradients */
+
   --gradient-primary: linear-gradient(
     135deg,
     #8b5cf6 0%,
@@ -53,12 +57,28 @@
     );
 
   /* Shadows */
+
   --shadow-card:
-    0 10px 40px rgba(0, 0, 0, 0.45);
+    0 10px 40px rgba(
+      0,
+      0,
+      0,
+      0.45
+    );
 
   --shadow-glow:
-    0 0 40px rgba(139, 92, 246, 0.35),
-    0 20px 60px rgba(139, 92, 246, 0.25);
+    0 0 40px rgba(
+      139,
+      92,
+      246,
+      0.35
+    ),
+    0 20px 60px rgba(
+      139,
+      92,
+      246,
+      0.25
+    );
 }
 
 /* Base */
@@ -73,50 +93,70 @@ html {
 
 body {
   min-height: 100vh;
+
   overflow-x: hidden;
 
   background-color: #050816;
-  background-image: var(--gradient-aurora);
+
+  background-image:
+    var(--gradient-aurora);
 
   background-repeat: no-repeat;
+
   background-size: cover;
+
   background-position: center;
 
   color: var(--foreground);
 
-  font-family: var(--font-inter);
+  font-family: var(
+    --font-inter
+  );
 
   position: relative;
 
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing:
+    antialiased;
+
+  -moz-osx-font-smoothing:
+    grayscale;
 }
 
-/* Dark Overlay */
+/* Safari-safe background layers */
 
 body::before {
   content: "";
 
   position: fixed;
+
   inset: 0;
 
   pointer-events: none;
 
   background:
     linear-gradient(
-      rgba(0, 0, 0, 0.12),
-      rgba(0, 0, 0, 0.25)
+      rgba(
+        0,
+        0,
+        0,
+        0.12
+      ),
+      rgba(
+        0,
+        0,
+        0,
+        0.25
+      )
     );
 
-  z-index: -2;
+  z-index: 0;
 }
-
-/* Center Glow */
 
 body::after {
   content: "";
 
   position: fixed;
+
   inset: 0;
 
   pointer-events: none;
@@ -124,11 +164,23 @@ body::after {
   background:
     radial-gradient(
       600px circle at center,
-      rgba(255, 255, 255, 0.025),
+      rgba(
+        255,
+        255,
+        255,
+        0.025
+      ),
       transparent 70%
     );
 
-  z-index: -1;
+  z-index: 0;
+}
+
+/* Ensure content stays above overlays */
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Typography */
@@ -139,24 +191,47 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-poppins);
+  font-family: var(
+    --font-poppins
+  );
 }
 
 /* Glass Card */
 
 .glass-card {
-  background: var(--card);
+  background: rgba(
+    10,
+    15,
+    35,
+    0.65
+  );
 
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter:
+    blur(14px)
+    saturate(140%);
 
-  border: 1px solid var(--border);
+  -webkit-backdrop-filter:
+    blur(14px)
+    saturate(140%);
+
+  transform: translateZ(0);
+
+  will-change: transform;
+
+  border: 1px solid
+    var(--border);
 
   border-radius: 28px;
 
   box-shadow:
     var(--shadow-card),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        0.04
+      );
 }
 
 /* Hover Effect */
@@ -169,31 +244,42 @@ h6 {
 }
 
 .glass-hover:hover {
-  background: var(--card-hover);
+  background:
+    var(--card-hover);
 
-  transform: translateY(-2px);
+  transform:
+    translateY(-2px);
 
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(
+    255,
+    255,
+    255,
+    0.12
+  );
 }
 
 /* Glow Utility */
 
 .glow {
-  box-shadow: var(--shadow-glow);
+  box-shadow:
+    var(--shadow-glow);
 }
 
 /* Gradient Text */
 
 .gradient-text {
-  background: linear-gradient(
-    135deg,
-    #8b5cf6,
-    #a78bfa
-  );
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #a78bfa
+    );
 
-  -webkit-background-clip: text;
+  -webkit-background-clip:
+    text;
 
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color:
+    transparent;
 }
 
 /* Layout */
@@ -204,32 +290,41 @@ h6 {
   margin: 0 auto;
 
   padding-left: 24px;
+
   padding-right: 24px;
 }
 
 .section-spacing {
   padding-top: 96px;
+
   padding-bottom: 96px;
 }
 
 /* Animations */
 
 .animate-fade-up {
-  animation: fadeUp 0.5s ease forwards;
+  animation:
+    fadeUp 0.5s ease
+    forwards;
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+
+    transform:
+      translateY(20px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+
+    transform:
+      translateY(0);
   }
 }
 
+/* Gauge */
 
 .gauge-container svg {
   filter:
