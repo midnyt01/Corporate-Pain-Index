@@ -7,7 +7,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import {
-  GripVertical,
+   Menu,
 } from "lucide-react";
 
 interface Props {
@@ -170,7 +170,7 @@ export default function SortableItem({
           "
           aria-label="Drag item"
         >
-          <GripVertical
+          < Menu
             className="
             h-5
             w-5
