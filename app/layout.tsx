@@ -20,6 +20,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Corporate Pain Index",
   description: "Discover your biggest professional bottleneck",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
