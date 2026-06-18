@@ -42,9 +42,9 @@ export default function ResultsPage() {
         <AtAGlanceCard />
       </div>
 
-      {/* <div className="mt-6">
+      <div className="mt-6">
         <HiddenCostCard />
-      </div> */}
+      </div>
 
       <div
         className="
