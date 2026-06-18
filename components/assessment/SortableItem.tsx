@@ -7,8 +7,13 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import {
-   Menu,
+  Menu,
 } from "lucide-react";
+
+import {
+  useEffect,
+  useState,
+} from "react";
 
 interface Props {
   id: string;
@@ -34,6 +39,32 @@ export default function SortableItem({
     id,
   });
 
+  const [
+    isDesktop,
+    setIsDesktop,
+  ] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsDesktop(
+        window.innerWidth >= 768
+      );
+    };
+
+    checkScreen();
+
+    window.addEventListener(
+      "resize",
+      checkScreen
+    );
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        checkScreen
+      );
+  }, []);
+
   const style = {
     transform:
       CSS.Transform.toString(
@@ -42,10 +73,19 @@ export default function SortableItem({
     transition,
   };
 
+  const dragProps =
+    isDesktop
+      ? {
+          ...attributes,
+          ...listeners,
+        }
+      : {};
+
   return (
     <div
       ref={setNodeRef}
       style={style}
+      {...dragProps}
       className={`
         rounded-3xl
         border
@@ -64,6 +104,12 @@ export default function SortableItem({
         transition-all
 
         ${
+          isDesktop
+            ? "cursor-grab active:cursor-grabbing"
+            : ""
+        }
+
+        ${
           isDragging
             ? "scale-[1.02] shadow-2xl"
             : ""
@@ -72,32 +118,32 @@ export default function SortableItem({
     >
       <div
         className="
-        flex
-        items-center
-        gap-4
+          flex
+          items-center
+          gap-4
         "
       >
         {/* Rank */}
 
         <div
           className="
-          w-10
-          h-10
+            w-10
+            h-10
 
-          rounded-full
+            rounded-full
 
-          bg-violet-500/15
+            bg-violet-500/15
 
-          flex
-          items-center
-          justify-center
+            flex
+            items-center
+            justify-center
 
-          text-sm
-          font-semibold
+            text-sm
+            font-semibold
 
-          text-violet-300
+            text-violet-300
 
-          shrink-0
+            shrink-0
           "
         >
           {rank}
@@ -107,23 +153,23 @@ export default function SortableItem({
 
         <div
           className="
-          flex-1
+            flex-1
 
-          min-w-0
+            min-w-0
 
-          pr-2
+            pr-2
           "
         >
           <h3
             className="
-            text-white
+              text-white
 
-            font-semibold
+              font-semibold
 
-            text-sm
-            md:text-base
+              text-sm
+              md:text-base
 
-            truncate
+              truncate
             "
           >
             {title}
@@ -131,14 +177,14 @@ export default function SortableItem({
 
           <p
             className="
-            text-slate-400
+              text-slate-400
 
-            text-xs
-            md:text-sm
+              text-xs
+              md:text-sm
 
-            mt-1
+              mt-1
 
-            line-clamp-1
+              line-clamp-1
             "
           >
             {description}
@@ -148,8 +194,12 @@ export default function SortableItem({
         {/* Drag Handle */}
 
         <button
-          {...attributes}
-          {...listeners}
+          {...(!isDesktop
+            ? {
+                ...attributes,
+                ...listeners,
+              }
+            : {})}
           className="
             shrink-0
 
@@ -170,10 +220,10 @@ export default function SortableItem({
           "
           aria-label="Drag item"
         >
-          < Menu
+          <Menu
             className="
-            h-5
-            w-5
+              h-5
+              w-5
             "
           />
         </button>

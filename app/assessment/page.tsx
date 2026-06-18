@@ -31,7 +31,8 @@ export default function AssessmentPage() {
   currentQuestionIndex,
   setCurrentQuestionIndex,
   isHydrated,
-  clearAnswers,
+  setAssessmentComplete,
+
 } = useAssessment();
 
 
@@ -138,7 +139,7 @@ const handleFinish = async () => {
       "PAYLOAD",
       payload
     );
-    console.log(answers)
+    setAssessmentComplete(true);
 
     setIsSaving(true);
 
