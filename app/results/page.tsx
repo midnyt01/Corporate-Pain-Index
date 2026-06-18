@@ -1,5 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+import { useAssessment } from "@/context/AssessmentContext";
+
 import ResultsHero from "@/components/results/ResultsHero";
 import PainScoreCard from "@/components/results/PainScoreCard";
 import AtAGlanceCard from "@/components/results/AtGlanceCard";
@@ -9,34 +14,82 @@ import NotAloneCard from "@/components/results/NotAloneCard";
 import ResultsFooter from "@/components/results/ResultsFooter";
 import ResearchCard from "@/components/results/ResearchCard";
 
-
-
 export default function ResultsPage() {
+  const router = useRouter();
+
+  const {
+    isHydrated,
+    isAssessmentComplete,
+  } = useAssessment();
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    if (!isAssessmentComplete) {
+      router.replace("/");
+    }
+  }, [
+    isHydrated,
+    isAssessmentComplete,
+    router,
+  ]);
+
+  if (
+    !isHydrated ||
+    !isAssessmentComplete
+  ) {
+    return (
+      <div
+        className="
+          min-h-screen
+          flex
+          items-center
+          justify-center
+        "
+      >
+        <div
+          className="
+            h-10
+            w-10
+
+            rounded-full
+
+            border-2
+            border-white/20
+
+            border-t-cyan-400
+
+            animate-spin
+          "
+        />
+      </div>
+    );
+  }
 
   return (
     <main
       className="
-      min-h-screen
+        min-h-screen
 
-      px-6
-      py-12
+        px-6
+        py-12
 
-      max-w-7xl
-      mx-auto
-    "
+        max-w-7xl
+        mx-auto
+      "
     >
       <ResultsHero />
 
       <div
         className="
-        mt-8
+          mt-8
 
-        grid
-        grid-cols-1
-        lg:grid-cols-2
+          grid
+          grid-cols-1
+          lg:grid-cols-2
 
-        gap-6
-      "
+          gap-6
+        "
       >
         <PainScoreCard />
         <AtAGlanceCard />
@@ -48,14 +101,14 @@ export default function ResultsPage() {
 
       <div
         className="
-        mt-6
+          mt-6
 
-        grid
-        grid-cols-1
-        lg:grid-cols-2
+          grid
+          grid-cols-1
+          lg:grid-cols-2
 
-        gap-6
-      "
+          gap-6
+        "
       >
         <SolutionSnapshotCard />
         <NotAloneCard />

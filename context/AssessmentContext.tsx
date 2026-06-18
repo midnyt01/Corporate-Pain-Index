@@ -25,6 +25,12 @@ interface AssessmentContextType {
 
   clearAnswers: () => void;
 
+  isAssessmentComplete: boolean;
+
+  setAssessmentComplete: (
+    value: boolean
+  ) => void;
+
   isHydrated: boolean;
 }
 
@@ -46,10 +52,16 @@ export function AssessmentProvider({
     setCurrentQuestionIndex,
   ] = useState(0);
 
+  const [
+    isAssessmentComplete,
+    setAssessmentComplete,
+  ] = useState(false);
+
   const [isHydrated, setIsHydrated] =
     useState(false);
 
-  // Load data
+  // Load saved data
+
   useEffect(() => {
     try {
       const storedAnswers =
@@ -60,6 +72,11 @@ export function AssessmentProvider({
       const storedProgress =
         localStorage.getItem(
           "assessment_progress"
+        );
+
+      const storedCompletion =
+        localStorage.getItem(
+          "assessment_complete"
         );
 
       if (storedAnswers) {
@@ -73,6 +90,14 @@ export function AssessmentProvider({
           Number(storedProgress)
         );
       }
+
+      if (storedCompletion) {
+        setAssessmentComplete(
+          JSON.parse(
+            storedCompletion
+          )
+        );
+      }
     } catch (error) {
       console.error(
         "Error loading assessment data:",
@@ -84,6 +109,7 @@ export function AssessmentProvider({
   }, []);
 
   // Save answers
+
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -94,6 +120,7 @@ export function AssessmentProvider({
   }, [answers, isHydrated]);
 
   // Save progress
+
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -103,6 +130,22 @@ export function AssessmentProvider({
     );
   }, [
     currentQuestionIndex,
+    isHydrated,
+  ]);
+
+  // Save completion status
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    localStorage.setItem(
+      "assessment_complete",
+      JSON.stringify(
+        isAssessmentComplete
+      )
+    );
+  }, [
+    isAssessmentComplete,
     isHydrated,
   ]);
 
@@ -121,12 +164,18 @@ export function AssessmentProvider({
 
     setCurrentQuestionIndex(0);
 
+    setAssessmentComplete(false);
+
     localStorage.removeItem(
       "assessment_answers"
     );
 
     localStorage.removeItem(
       "assessment_progress"
+    );
+
+    localStorage.removeItem(
+      "assessment_complete"
     );
 
     localStorage.removeItem(
@@ -145,6 +194,9 @@ export function AssessmentProvider({
         setAnswer,
 
         clearAnswers,
+
+        isAssessmentComplete,
+        setAssessmentComplete,
 
         isHydrated,
       }}
